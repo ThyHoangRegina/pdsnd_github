@@ -2,9 +2,10 @@ import time
 import pandas as pd
 import numpy as np
 
-CITY_DATA = { 'chicago': 'chicago.csv',
-              'new york city': 'new_york_city.csv',
-              'washington': 'washington.csv' }
+CITY_DATA = {'chicago': 'chicago.csv',
+             'new york city': 'new_york_city.csv',
+             'washington': 'washington.csv'}
+
 
 def get_filters():
     """
@@ -16,30 +17,32 @@ def get_filters():
         (str) day - name of the day of week to filter by, or "all" to apply no day filter
     """
     print('Hello! Let\'s explore some US bikeshare data!')
-    # get user input for city (chicago, new york city, washington). HINT: Use a while loop to handle invalid inputs
+    # get user input for city (chicago, new york city, washington).
     while True:
-        cities= ['chicago','new york city','washington']
-        city= input("\n Enter city you would like to analyse? (Chicago, New york city, Washington) \n").lower()
+        cities = ['chicago', 'new york city', 'washington']
+        city = input(
+            "\n Enter city you would like to analyse? (Chicago, New york city, Washington) \n").lower()
         if city in cities:
             break
         else:
             print("\n Invalid input. Please enter a valid city name")
 
-
     # get user input for month (all, january, february, ... , june)
     while True:
-        months= ['january','february','march','april','june','may','all']
-        month = input("\n Enter the month? (January, February, March, April, May, June)? Type 'all' for no month filter\n").lower()
+        months = ['january', 'february', 'march',
+                  'april', 'june', 'may', 'all']
+        month = input(
+            "\n Enter the month? (January, February, March, April, May, June)? Type 'all' for no month filter\n").lower()
         if month in months:
             break
         else:
             print("\n Please enter a valid month")
 
-
     # get user input for day of week (all, monday, tuesday, ... sunday)
     while True:
-        days= ['monday','tuesday','wednesday','thursday','friday','saturday','sunday','all']
-        day = input("\n Enter the day of the week? (Monday, Tuesday, Wednesday, Thursday, Friday, Saturday, Sunday)? Type 'all' for no day filter \n").lower()         
+        days = ['monday', 'tuesday', 'wednesday', 'thursday',
+                'friday', 'saturday', 'sunday', 'all']
+        day = input("\n Enter the day of the week? (Monday, Tuesday, Wednesday, Thursday, Friday, Saturday, Sunday)? Type 'all' for no day filter \n").lower()
         if day in days:
             break
         else:
@@ -47,6 +50,7 @@ def get_filters():
     print(city, month, day)
     print('-'*40)
     return city, month, day
+
 
 def load_data(city, month, day):
     """
@@ -63,15 +67,15 @@ def load_data(city, month, day):
     df['Start Time'] = pd.to_datetime(df['Start Time'])
     df['month'] = df['Start Time'].dt.strftime('%B')
     df['day_of_week'] = df['Start Time'].dt.day_name()
-    
+
     if month != "all":
         print("Filter data by month\n")
-        df = df[df['month']== month.title()]
+        df = df[df['month'] == month.title()]
         print(df)
 
     if day != "all":
         print("Filter data by Day of week\n")
-        df = df[df['day_of_week']== day.title()]
+        df = df[df['day_of_week'] == day.title()]
 
     df = pd.DataFrame(df)
     print(df)
@@ -120,8 +124,10 @@ def station_stats(df):
     print("Most commonly used end station: ", common_end_station)
 
     # display most frequent combination of start station and end station trip
-    group_combination = df.groupby(['Start Station', 'End Station']).size().reset_index(name='count')
-    most_frequent_station = group_combination.loc[group_combination['count'].idxmax()]
+    group_combination = df.groupby(
+        ['Start Station', 'End Station']).size().reset_index(name='count')
+    most_frequent_station = group_combination.loc[group_combination['count'].idxmax(
+    )]
     print("Most frequent combination:")
     print("Start station: ", most_frequent_station['Start Station'])
     print("End station: ", most_frequent_station['End Station'])
@@ -143,7 +149,8 @@ def trip_duration_stats(df):
     print("Total duration: {} (seconds)".format(total_duration))
 
     # display mean travel time
-    mean_travel_time = df.groupby(["Start Station", "End Station"])["Trip Duration"].mean()
+    mean_travel_time = df.groupby(["Start Station", "End Station"])[
+        "Trip Duration"].mean()
     print("Mean travel time:")
     print(mean_travel_time)
 
@@ -173,7 +180,7 @@ def user_stats(df):
 
     most_recent_yob = int(df["Birth Year"].max())
     print("Most recent year of birth: ", most_recent_yob)
-    
+
     year_stats = df["Birth Year"].value_counts()
     most_common_year_of_birth = year_stats.idxmax()
     print("Most common year of birth:", int(most_common_year_of_birth))
@@ -181,22 +188,25 @@ def user_stats(df):
     print("\nThis took %s seconds." % (time.time() - start_time))
     print('-'*40)
 
+
 def display_raw_data(df):
     """ Display raw data """
     i = 0
     view_raw = input("Do you want to view raw data? (yes/no)\n").lower()
-    # TO DO: convert the user input to lower case using lower() function
-    pd.set_option('display.max_columns',200)
-    
-    while True:            
+    pd.set_option('display.max_columns', 200)
+
+    while True:
         if view_raw == 'no':
             break
         elif view_raw == 'yes':
             print(df.iloc[i:(i+5)])
-            view_raw = input("Do you want to view more raw data? (yes/no)\n").lower()
+            view_raw = input(
+                "Do you want to view more raw data? (yes/no)\n").lower()
             i += 5
         else:
-            view_raw = input("\nYour input is invalid. Please enter only 'yes' or 'no'\n").lower()
+            view_raw = input(
+                "\nYour input is invalid. Please enter only 'yes' or 'no'\n").lower()
+
 
 def main():
     while True:
@@ -216,5 +226,6 @@ def main():
         except BaseException:
             print("The data is invalid!")
 
+
 if __name__ == "__main__":
-	main()
+    main()
